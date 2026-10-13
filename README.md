@@ -5,4 +5,4 @@ Accessible Cantonese co-reading picture book for toddlers (靜態畫面、廣東
 - Live: https://julianzhumin.github.io/three-little-pigs/
 - Hub: https://julianzhumin.github.io/AstraGarten/
 
-Version: **1a**
+Version: **1b**

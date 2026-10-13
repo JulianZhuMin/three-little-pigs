@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#FF9F6B">
-<meta name="app-version" content="1a">
+<meta name="app-version" content="1b">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-180.png">
 <title>黑、白、花，三隻小豬 / Three Little Pigs</title>
@@ -95,7 +95,7 @@ header.bar .ver{font-size:.7rem;opacity:.5}
   <div class="panel">
     <div aria-hidden="true" style="font-size:2.5rem">🐷📖</div>
     <h2 id="gate-title">黑、白、花，三隻小豬</h2>
-    <p>無障礙親子共讀繪本。撳「開始」就會播廣東話旁白同輕柔音樂。用大掣、雙擊或三指左右滑翻頁。</p>
+    <p>無障礙親子共讀繪本。撳「開始」就會播廣東話旁白同短短卡通音效。用大掣、雙擊或三指左右滑翻頁。</p>
     <button type="button" id="start-btn">開始共讀 ▶</button>
   </div>
 </div>
@@ -105,14 +105,13 @@ header.bar .ver{font-size:.7rem;opacity:.5}
     <h1>黑、白、花，三隻小豬</h1>
     <div class="toggles">
       <button type="button" id="btn-tips" aria-pressed="true" title="互動貼士">貼士開</button>
-      <button type="button" id="btn-bgm" aria-pressed="true" title="背景音樂">音樂開</button>
     </div>
-    <span class="ver" aria-hidden="true">v1a</span>
+    <span class="ver" aria-hidden="true">v1b</span>
   </header>
 
   <main id="stage" aria-live="polite">
     <!-- COVER -->
-    <section class="page active" data-page="0" data-bgm="gentle" aria-label="封面：黑豬、白豬同花花豬並排，後面對應草屋、木屋、磚屋。">
+    <section class="page active" data-page="0" aria-label="封面：黑豬、白豬同花花豬並排，後面對應草屋、木屋、磚屋。">
       <div class="scene" role="img" aria-label="黑豬、白豬同黑白斑點豬並排；後面對應草屋、木屋、磚屋。">
         <div class="sky"></div><div class="sun" aria-hidden="true">☀️</div>
         <span class="cloud c1" aria-hidden="true">☁️</span><span class="cloud c2" aria-hidden="true">☁️</span>
@@ -137,7 +136,7 @@ header.bar .ver{font-size:.7rem;opacity:.5}
     </section>
 
     <!-- P1 -->
-    <section class="page" data-page="1" data-bgm="gentle" aria-label="第1頁出發：豬媽媽揮手；三兄弟孭袋出發。">
+    <section class="page" data-page="1" aria-label="第1頁出發：豬媽媽揮手；三兄弟孭袋出發。">
       <div class="scene" role="img" aria-label="豬媽媽揮手；黑豬、白豬、花花豬三兄弟孭住袋袋出發。">
         <div class="sky"></div><div class="sun" aria-hidden="true">☀️</div>
         <div class="ground"></div>
@@ -159,7 +158,7 @@ header.bar .ver{font-size:.7rem;opacity:.5}
     </section>
 
     <!-- P2 -->
-    <section class="page" data-page="2" data-bgm="gentle" aria-label="第2頁草屋：黑色大豬抱住最後一紮稻草，草屋就嚟起好。">
+    <section class="page" data-page="2" aria-label="第2頁草屋：黑色大豬抱住最後一紮稻草，草屋就嚟起好。">
       <div class="scene" role="img" aria-label="黑色大豬抱住最後一紮稻草，草屋就嚟起好。">
         <div class="sky"></div><div class="sun" aria-hidden="true">☀️</div>
         <div class="ground"></div>
@@ -177,7 +176,7 @@ header.bar .ver{font-size:.7rem;opacity:.5}
     </section>
 
     <!-- P3 -->
-    <section class="page" data-page="3" data-bgm="gentle" aria-label="第3頁木屋：白色二豬拽住最後一根木頭，來到就嚟完工嘅木屋跟前。">
+    <section class="page" data-page="3" aria-label="第3頁木屋：白色二豬拽住最後一根木頭，來到就嚟完工嘅木屋跟前。">
       <div class="scene" role="img" aria-label="白色二豬拽住最後一根木頭，來到就嚟完工嘅木屋跟前。">
         <div class="sky"></div><div class="sun" aria-hidden="true">☀️</div>
         <div class="ground"></div>
@@ -195,7 +194,7 @@ header.bar .ver{font-size:.7rem;opacity:.5}
     </section>
 
     <!-- P4 -->
-    <section class="page" data-page="4" data-bgm="gentle" aria-label="第4頁磚屋：花花三豬彎腰推住裝滿紅磚嘅小車，磚屋先砌咗一半。">
+    <section class="page" data-page="4" aria-label="第4頁磚屋：花花三豬彎腰推住裝滿紅磚嘅小車，磚屋先砌咗一半。">
       <div class="scene" role="img" aria-label="花花三豬彎腰推住裝滿紅磚嘅小車，磚屋先砌咗一半。">
         <div class="sky dusk"></div><div class="sun" aria-hidden="true">🌇</div>
         <div class="ground"></div>
@@ -213,7 +212,7 @@ header.bar .ver{font-size:.7rem;opacity:.5}
     </section>
 
     <!-- P5 -->
-    <section class="page" data-page="5" data-bgm="tense" aria-label="第5頁：大灰狼大力吹氣，草屋冧；黑色大豬由稻草底下衝出嚟逃跑。">
+    <section class="page" data-page="5" aria-label="第5頁：大灰狼大力吹氣，草屋冧；黑色大豬由稻草底下衝出嚟逃跑。">
       <div class="scene" role="img" aria-label="大灰狼大力吹氣，草屋冧；黑色大豬由稻草底下衝出嚟逃跑。">
         <div class="sky tense"></div>
         <div class="ground"></div>
@@ -233,7 +232,7 @@ header.bar .ver{font-size:.7rem;opacity:.5}
     </section>
 
     <!-- P6 -->
-    <section class="page" data-page="6" data-bgm="tense" aria-label="第6頁：黑豬同白豬喺木屋入面透過小窗驚恐望住；大灰狼用兩隻前爪用力推木屋。">
+    <section class="page" data-page="6" aria-label="第6頁：黑豬同白豬喺木屋入面透過小窗驚恐望住；大灰狼用兩隻前爪用力推木屋。">
       <div class="scene" role="img" aria-label="黑色大豬同白色二豬喺木屋入面，透過小窗驚恐望住外邊；大灰狼用兩隻前爪用力推木屋。">
         <div class="sky tense"></div>
         <div class="ground"></div>
@@ -258,7 +257,7 @@ header.bar .ver{font-size:.7rem;opacity:.5}
     </section>
 
     <!-- P7 -->
-    <section class="page" data-page="7" data-bgm="tense" aria-label="第7頁：大灰狼又吹又推，激到面紅；磚屋好穩；三豬喺窗邊陰陰嘴笑。">
+    <section class="page" data-page="7" aria-label="第7頁：大灰狼又吹又推，激到面紅；磚屋好穩；三豬喺窗邊陰陰嘴笑。">
       <div class="scene" role="img" aria-label="大灰狼又吹又推，激到面紅；磚屋好穩；三豬喺窗邊陰陰嘴笑。">
         <div class="sky tense"></div>
         <div class="ground"></div>
@@ -284,7 +283,7 @@ header.bar .ver{font-size:.7rem;opacity:.5}
     </section>
 
     <!-- P8 -->
-    <section class="page" data-page="8" data-bgm="tense" aria-label="第8頁：大灰狼上磚屋頂，準備鑽入煙囪。">
+    <section class="page" data-page="8" aria-label="第8頁：大灰狼上磚屋頂，準備鑽入煙囪。">
       <div class="scene" role="img" aria-label="大灰狼上磚屋頂，準備鑽入煙囪。">
         <div class="sky tense"></div><div class="moon" aria-hidden="true">🌙</div>
         <div class="ground"></div>
@@ -305,7 +304,7 @@ header.bar .ver{font-size:.7rem;opacity:.5}
     </section>
 
     <!-- P9 -->
-    <section class="page" data-page="9" data-bgm="happy" aria-label="第9頁：狼跌落鑊，痛到跑走。">
+    <section class="page" data-page="9" aria-label="第9頁：狼跌落鑊，痛到跑走。">
       <div class="scene" role="img" aria-label="狼由煙囪跌落滾水鑊，好燙，痛到跳起急急腳走咗。">
         <div class="sky happy"></div>
         <div class="ground"></div>
@@ -323,7 +322,7 @@ header.bar .ver{font-size:.7rem;opacity:.5}
     </section>
 
     <!-- P10 -->
-    <section class="page" data-page="10" data-bgm="happy" aria-label="第10頁結局：三豬手拖手喺磚屋前笑。三指左滑返回星星學樂園。">
+    <section class="page" data-page="10" aria-label="第10頁結局：三豬手拖手喺磚屋前笑。三指左滑返回星星學樂園。">
       <div class="scene" role="img" aria-label="三隻小豬手拖手喺磚屋前面歡呼，開心又安全。">
         <div class="sky happy"></div><div class="sun" aria-hidden="true">☀️</div>
         <span class="cloud c1" aria-hidden="true">☁️</span>
@@ -358,35 +357,35 @@ header.bar .ver{font-size:.7rem;opacity:.5}
 
 <script>
 (function () {
-  var APP_VERSION = '1a';
+  var APP_VERSION = '1b';
   var HUB = 'https://julianzhumin.github.io/AstraGarten/';
-  var TOTAL = 11; // 0 cover .. 10 ending
   var page = 0;
   var tipsOn = true;
-  var bgmOn = true;
   var started = false;
   var tipTimer = null;
   var vo = new Audio();
   var tip = new Audio();
-  var bgm = new Audio();
-  bgm.loop = true;
-  var BGM_VOL = 0.15;
-  var BGM_DUCK = 0.05;
+  var sfx = new Audio();
+  var SFX_VOL = 0.28;
+  var SFX_DUCK = 0.12;
   var cache = {};
+  var voPlaying = false;
 
+  // Page enter SFX (mood). Page-turn also plays sfx-turn.
   var PAGE_AUDIO = {
-    0: { vo: 'cover', tip: 'tip-cover', bgm: 'gentle' },
-    1: { vo: 'p1', tip: 'tip-p1', bgm: 'gentle' },
-    2: { vo: 'p2', tip: 'tip-p2', bgm: 'gentle' },
-    3: { vo: 'p3', tip: 'tip-p3', bgm: 'gentle' },
-    4: { vo: 'p4', tip: 'tip-p4', bgm: 'gentle' },
-    5: { vo: 'p5', tip: 'tip-p5', bgm: 'tense' },
-    6: { vo: 'p6', tip: 'tip-p6', bgm: 'tense' },
-    7: { vo: 'p7', tip: 'tip-p7', bgm: 'tense' },
-    8: { vo: 'p8', tip: 'tip-p8', bgm: 'tense' },
-    9: { vo: 'p9', tip: 'tip-p9', bgm: 'happy' },
-    10: { vo: 'p10', tip: 'tip-p10', bgm: 'happy' }
+    0: { vo: 'cover', tip: 'tip-cover', sfx: 'sfx-pop' },
+    1: { vo: 'p1', tip: 'tip-p1', sfx: 'sfx-pop' },
+    2: { vo: 'p2', tip: 'tip-p2', sfx: 'sfx-tap' },
+    3: { vo: 'p3', tip: 'tip-p3', sfx: 'sfx-tap' },
+    4: { vo: 'p4', tip: 'tip-p4', sfx: 'sfx-brick' },
+    5: { vo: 'p5', tip: 'tip-p5', sfx: 'sfx-wind' },
+    6: { vo: 'p6', tip: 'tip-p6', sfx: 'sfx-stinger' },
+    7: { vo: 'p7', tip: 'tip-p7', sfx: 'sfx-stinger' },
+    8: { vo: 'p8', tip: 'tip-p8', sfx: 'sfx-wind' },
+    9: { vo: 'p9', tip: 'tip-p9', sfx: 'sfx-splash' },
+    10: { vo: 'p10', tip: 'tip-p10', sfx: 'sfx-cheer' }
   };
+  var SFX_NAMES = ['sfx-turn','sfx-pop','sfx-tap','sfx-brick','sfx-wind','sfx-stinger','sfx-splash','sfx-boing','sfx-cheer'];
 
   function url(name) {
     return './audio/' + name + '.mp3?v=' + encodeURIComponent(APP_VERSION);
@@ -394,7 +393,7 @@ header.bar .ver{font-size:.7rem;opacity:.5}
   function preload() {
     Object.keys(PAGE_AUDIO).forEach(function (k) {
       var a = PAGE_AUDIO[k];
-      ['vo', 'tip'].forEach(function (kind) {
+      ['vo', 'tip', 'sfx'].forEach(function (kind) {
         var n = a[kind];
         if (!cache[n]) {
           var x = new Audio();
@@ -404,8 +403,7 @@ header.bar .ver{font-size:.7rem;opacity:.5}
         }
       });
     });
-    ['gentle', 'tense', 'happy'].forEach(function (m) {
-      var n = 'bgm-' + m;
+    SFX_NAMES.forEach(function (n) {
       if (!cache[n]) {
         var x = new Audio();
         x.preload = 'auto';
@@ -418,50 +416,55 @@ header.bar .ver{font-size:.7rem;opacity:.5}
   function stopVO() {
     clearTimeout(tipTimer);
     tipTimer = null;
+    voPlaying = false;
     try { vo.pause(); vo.currentTime = 0; } catch (e) {}
     try { tip.pause(); tip.currentTime = 0; } catch (e) {}
-    setBgmVol(BGM_VOL);
   }
 
-  function setBgmVol(v) {
-    try { bgm.volume = bgmOn ? v : 0; } catch (e) {}
-  }
-
-  function playBgm(mood) {
-    if (!bgmOn) { try { bgm.pause(); } catch (e) {} return; }
-    var src = url('bgm-' + mood);
-    if (bgm.getAttribute('data-mood') !== mood) {
-      bgm.src = src;
-      bgm.setAttribute('data-mood', mood);
-    }
-    setBgmVol(BGM_VOL);
-    var p = bgm.play();
+  function playSfx(name, forceQuiet) {
+    if (!name) return;
+    try {
+      sfx.pause();
+      sfx.currentTime = 0;
+    } catch (e) {}
+    sfx.src = url(name);
+    sfx.volume = forceQuiet || voPlaying ? SFX_DUCK : SFX_VOL;
+    var p = sfx.play();
     if (p && p.catch) p.catch(function () {});
   }
 
-  function playPageAudio() {
+  function playPageAudio(opts) {
     if (!started) return;
+    opts = opts || {};
     stopVO();
     var meta = PAGE_AUDIO[page];
-    playBgm(meta.bgm);
+    if (opts.withTurn) playSfx('sfx-turn', true);
+    // scene SFX shortly with / just before VO; keep ducked under VO
+    setTimeout(function () {
+      playSfx(meta.sfx, true);
+    }, opts.withTurn ? 120 : 0);
+    // p9 also soft boing after splash
+    if (page === 9) {
+      setTimeout(function () { playSfx('sfx-boing', true); }, opts.withTurn ? 420 : 300);
+    }
     vo.src = url(meta.vo);
-    setBgmVol(BGM_DUCK);
+    voPlaying = true;
     var p = vo.play();
     if (p && p.catch) p.catch(function () {});
     vo.onended = function () {
-      setBgmVol(BGM_VOL);
+      voPlaying = false;
       if (!tipsOn) return;
       tipTimer = setTimeout(function () {
         tip.src = url(meta.tip);
-        setBgmVol(BGM_DUCK);
+        voPlaying = true;
         var q = tip.play();
         if (q && q.catch) q.catch(function () {});
-        tip.onended = function () { setBgmVol(BGM_VOL); };
+        tip.onended = function () { voPlaying = false; };
       }, 700);
     };
   }
 
-  function showPage(n) {
+  function showPage(n, opts) {
     if (n < 0) n = 0;
     if (n > 10) { goHub(); return; }
     page = n;
@@ -473,14 +476,19 @@ header.bar .ver{font-size:.7rem;opacity:.5}
     var atEnd = page === 10;
     document.getElementById('btn-next').hidden = atEnd;
     document.getElementById('btn-hub').hidden = !atEnd;
-    if (started) playPageAudio();
+    if (started) playPageAudio(opts || {});
   }
 
-  function next() { if (page >= 10) goHub(); else showPage(page + 1); }
-  function prev() { if (page > 0) showPage(page - 1); }
+  function next() {
+    if (page >= 10) goHub();
+    else showPage(page + 1, { withTurn: true });
+  }
+  function prev() {
+    if (page > 0) showPage(page - 1, { withTurn: true });
+  }
   function goHub() {
     stopVO();
-    try { bgm.pause(); } catch (e) {}
+    try { sfx.pause(); } catch (e) {}
     location.href = HUB;
   }
 
@@ -535,35 +543,27 @@ header.bar .ver{font-size:.7rem;opacity:.5}
   document.getElementById('btn-prev').addEventListener('click', prev);
   document.getElementById('btn-next').addEventListener('click', next);
   document.getElementById('btn-hub').addEventListener('click', goHub);
-  document.getElementById('btn-replay').addEventListener('click', function () { playPageAudio(); });
+  document.getElementById('btn-replay').addEventListener('click', function () { playPageAudio({}); });
 
   document.getElementById('btn-tips').addEventListener('click', function () {
     tipsOn = !tipsOn;
     this.setAttribute('aria-pressed', tipsOn ? 'true' : 'false');
     this.textContent = tipsOn ? '貼士開' : '貼士關';
-    if (!tipsOn) { try { tip.pause(); } catch (e) {} setBgmVol(BGM_VOL); }
-  });
-  document.getElementById('btn-bgm').addEventListener('click', function () {
-    bgmOn = !bgmOn;
-    this.setAttribute('aria-pressed', bgmOn ? 'true' : 'false');
-    this.textContent = bgmOn ? '音樂開' : '音樂關';
-    if (bgmOn) playBgm(PAGE_AUDIO[page].bgm);
-    else { try { bgm.pause(); } catch (e) {} }
+    if (!tipsOn) { try { tip.pause(); } catch (e) {} voPlaying = false; }
   });
 
   document.addEventListener('keydown', function (e) {
     if (!started) return;
     if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
     if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
-    if (e.key === 'r' || e.key === 'R') playPageAudio();
+    if (e.key === 'r' || e.key === 'R') playPageAudio({});
   });
 
   document.getElementById('start-btn').addEventListener('click', function () {
     started = true;
     document.getElementById('gate').style.display = 'none';
     preload();
-    showPage(0);
-    playPageAudio();
+    showPage(0, {});
   });
 
   if ('serviceWorker' in navigator) {
