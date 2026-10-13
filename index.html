@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#FF9F6B">
+<meta name="app-version" content="1a">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<title>黑、白、花，三隻小豬 / Three Little Pigs</title>
+<style>
+*{box-sizing:border-box}
+:root{
+  --bg:#fff6d6; --ink:#3b2c4a; --accent:#ff9f6b; --accent2:#7a4fb5;
+  --btn:#ff7a59; --safe:#8fd17a; --warn:#c45c26;
+}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);
+  font-family:"PingFang HK","Noto Sans TC","Arial Rounded MT Bold",-apple-system,sans-serif;
+  -webkit-tap-highlight-color:transparent;user-select:none;overflow:hidden}
+#app{display:flex;flex-direction:column;height:100%;max-width:900px;margin:0 auto;position:relative}
+header.bar{display:flex;align-items:center;gap:.5rem;padding:.45rem .7rem;background:rgba(255,255,255,.85);
+  border-bottom:3px solid #f3c9e0;flex-shrink:0;z-index:5}
+header.bar h1{font-size:1.05rem;margin:0;flex:1;line-height:1.25;color:var(--accent2)}
+header.bar .ver{font-size:.7rem;opacity:.5}
+.toggles{display:flex;gap:.35rem;flex-wrap:wrap}
+.toggles button{font-size:.85rem;padding:.35rem .65rem;border-radius:999px;border:2px solid var(--accent2);
+  background:#fff;color:var(--accent2);font-weight:700;cursor:pointer;min-height:40px}
+.toggles button[aria-pressed="true"]{background:var(--accent2);color:#fff}
+#stage{flex:1;position:relative;overflow:hidden;display:flex;align-items:stretch;justify-content:center;
+  touch-action:none}
+.page{display:none;width:100%;height:100%;flex-direction:column;padding:.5rem .7rem .3rem}
+.page.active{display:flex}
+.scene{flex:1;border-radius:24px;border:4px solid #fff;box-shadow:0 6px 0 rgba(0,0,0,.08);
+  position:relative;overflow:hidden;min-height:180px;background:#dff3ff}
+.scene-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  padding:4% 3% 6%;gap:2%}
+.ground{position:absolute;left:0;right:0;bottom:0;height:28%;background:linear-gradient(180deg,#b8e986,#8bc34a)}
+.sky{position:absolute;inset:0;background:linear-gradient(180deg,#87CEEB 0%,#dff3ff 55%,#ffe8a3 100%)}
+.sky.dusk{background:linear-gradient(180deg,#5b7db1 0%,#f4a261 55%,#e76f51 100%)}
+.sky.tense{background:linear-gradient(180deg,#6b7b8c 0%,#a8b5c0 50%,#c9b896 100%)}
+.sky.happy{background:linear-gradient(180deg,#7ec8f5 0%,#ffe8a3 70%,#ffd6e7 100%)}
+.caption{background:rgba(255,255,255,.92);border-radius:18px;padding:.55rem .85rem;margin-top:.45rem;
+  font-size:1.05rem;line-height:1.45;border:3px solid #f3c9e0;flex-shrink:0;max-height:28%;overflow:auto}
+.caption .tip{color:var(--accent2);font-weight:700;margin-top:.35rem;font-size:.95rem}
+.caption .page-label{font-size:.8rem;color:#7a6a88;margin-bottom:.2rem}
+.nav{display:flex;gap:.5rem;padding:.45rem .7rem .7rem;flex-shrink:0;align-items:center}
+.nav button{flex:1;min-height:52px;font-size:1.15rem;font-weight:800;border:none;border-radius:18px;
+  cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.15);color:#fff}
+.nav .prev{background:#9b8bb5}
+.nav .next{background:var(--btn)}
+.nav .replay{background:#6cc4ff;flex:0 0 auto;padding:0 1rem;min-width:3.2rem}
+.nav .hub{background:var(--safe)}
+.nav button:disabled{opacity:.35;cursor:not-allowed}
+.nav button:focus-visible{outline:4px dashed var(--ink);outline-offset:3px}
+/* characters & props — static, no animation */
+.pig{font-size:clamp(2.4rem,8vw,4.2rem);line-height:1;filter:drop-shadow(0 2px 0 rgba(0,0,0,.15));position:relative;z-index:2}
+.pig.black{filter:brightness(0.25) contrast(1.2) drop-shadow(0 2px 0 rgba(0,0,0,.2))}
+.pig.white{filter:brightness(1.35) saturate(0.3) drop-shadow(0 2px 0 rgba(0,0,0,.12))}
+.pig.spotted{position:relative}
+.pig.spotted::after{content:"";position:absolute;width:.35em;height:.35em;background:#2a2a2a;border-radius:50%;
+  left:.25em;top:.2em;opacity:.85;box-shadow:.45em .15em 0 #2a2a2a, .1em .45em 0 #2a2a2a}
+.mama{font-size:clamp(2.8rem,9vw,4.8rem);z-index:2}
+.wolf{font-size:clamp(2.8rem,9vw,5rem);z-index:3;filter:grayscale(.15) contrast(1.05)}
+.house{font-size:clamp(2.2rem,7vw,3.8rem);z-index:1}
+.row{display:flex;align-items:flex-end;justify-content:center;gap:clamp(.4rem,2vw,1.2rem);z-index:2;flex-wrap:wrap}
+.prop{font-size:clamp(1.4rem,4vw,2.4rem);z-index:2}
+.label-chip{background:rgba(255,255,255,.9);border-radius:999px;padding:.15rem .55rem;font-size:.75rem;
+  font-weight:700;color:var(--accent2);margin-top:.15rem}
+.stack{display:flex;flex-direction:column;align-items:center}
+.cloud{position:absolute;font-size:2rem;opacity:.7;z-index:0}
+.cloud.c1{top:8%;left:8%}.cloud.c2{top:12%;right:10%}.cloud.c3{top:6%;left:45%}
+.sun{position:absolute;top:6%;right:8%;font-size:2.4rem;z-index:0}
+.moon{position:absolute;top:8%;left:10%;font-size:2rem;z-index:0}
+.pot{font-size:clamp(2rem,6vw,3.2rem)}
+.speech{background:#fff;border:3px solid #3b2c4a;border-radius:16px;padding:.3rem .6rem;font-size:.85rem;
+  font-weight:700;max-width:12em;text-align:center;z-index:4;margin-bottom:.3rem}
+#gate{position:fixed;inset:0;background:rgba(59,44,74,.55);display:flex;align-items:center;justify-content:center;
+  z-index:50;padding:1rem}
+#gate .panel{background:#fff;border-radius:28px;padding:1.4rem 1.6rem;max-width:22rem;text-align:center;
+  border:4px solid var(--accent);box-shadow:0 10px 0 rgba(0,0,0,.12)}
+#gate h2{margin:.2rem 0 .6rem;color:var(--accent2);font-size:1.5rem}
+#gate p{margin:0 0 1rem;font-size:1.05rem;line-height:1.5}
+#gate button{min-height:52px;width:100%;font-size:1.2rem;font-weight:800;border:none;border-radius:18px;
+  background:var(--btn);color:#fff;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.15)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+@media (max-height:520px){
+  .caption{font-size:.92rem;max-height:32%}
+  .nav button{min-height:46px;font-size:1rem}
+}
+</style>
+</head>
+<body>
+<div id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+  <div class="panel">
+    <div aria-hidden="true" style="font-size:2.5rem">🐷📖</div>
+    <h2 id="gate-title">黑、白、花，三隻小豬</h2>
+    <p>無障礙親子共讀繪本。撳「開始」就會播廣東話旁白同輕柔音樂。用大掣、雙擊或三指左右滑翻頁。</p>
+    <button type="button" id="start-btn">開始共讀 ▶</button>
+  </div>
+</div>
+
+<div id="app">
+  <header class="bar">
+    <h1>黑、白、花，三隻小豬</h1>
+    <div class="toggles">
+      <button type="button" id="btn-tips" aria-pressed="true" title="互動貼士">貼士開</button>
+      <button type="button" id="btn-bgm" aria-pressed="true" title="背景音樂">音樂開</button>
+    </div>
+    <span class="ver" aria-hidden="true">v1a</span>
+  </header>
+
+  <main id="stage" aria-live="polite">
+    <!-- COVER -->
+    <section class="page active" data-page="0" data-bgm="gentle" aria-label="封面：黑豬、白豬同花花豬並排，後面對應草屋、木屋、磚屋。">
+      <div class="scene" role="img" aria-label="黑豬、白豬同黑白斑點豬並排；後面對應草屋、木屋、磚屋。">
+        <div class="sky"></div><div class="sun" aria-hidden="true">☀️</div>
+        <span class="cloud c1" aria-hidden="true">☁️</span><span class="cloud c2" aria-hidden="true">☁️</span>
+        <div class="ground"></div>
+        <div class="scene-inner">
+          <div class="row" style="margin-bottom:auto;padding-top:8%">
+            <div class="stack"><span class="house" aria-hidden="true">🛖</span><span class="label-chip">草屋</span></div>
+            <div class="stack"><span class="house" aria-hidden="true">🪵🏠</span><span class="label-chip">木屋</span></div>
+            <div class="stack"><span class="house" aria-hidden="true">🧱🏠</span><span class="label-chip">磚屋</span></div>
+          </div>
+          <div class="row">
+            <div class="stack"><span class="pig black" aria-hidden="true">🐷</span><span class="label-chip">黑豬</span></div>
+            <div class="stack"><span class="pig white" aria-hidden="true">🐷</span><span class="label-chip">白豬</span></div>
+            <div class="stack"><span class="pig spotted" aria-hidden="true">🐷</span><span class="label-chip">花花豬</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="caption"><div class="page-label">封面</div>
+        <div class="main-text">《黑、白、花，三隻小豬。》三指左滑翻頁。</div>
+        <div class="tip">互動貼士：同小朋友用手指數幾多隻小豬？</div>
+      </div>
+    </section>
+
+    <!-- P1 -->
+    <section class="page" data-page="1" data-bgm="gentle" aria-label="第1頁出發：豬媽媽揮手；三兄弟孭袋出發。">
+      <div class="scene" role="img" aria-label="豬媽媽揮手；黑豬、白豬、花花豬三兄弟孭住袋袋出發。">
+        <div class="sky"></div><div class="sun" aria-hidden="true">☀️</div>
+        <div class="ground"></div>
+        <div class="scene-inner">
+          <div class="row" style="width:100%;justify-content:space-around">
+            <div class="stack"><span class="mama" aria-hidden="true">🐖</span><span class="prop" aria-hidden="true">👋</span><span class="label-chip">豬媽媽</span></div>
+            <div class="row">
+              <div class="stack"><span class="pig black" aria-hidden="true">🐷</span><span class="prop" aria-hidden="true">🎒</span></div>
+              <div class="stack"><span class="pig white" aria-hidden="true">🐷</span><span class="prop" aria-hidden="true">🎒</span></div>
+              <div class="stack"><span class="pig spotted" aria-hidden="true">🐷</span><span class="prop" aria-hidden="true">🎒</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="caption"><div class="page-label">第1頁｜出發</div>
+        <div class="main-text">豬媽媽話：你哋大個啦，自己起屋住啦。三兄弟孭住袋袋出發。</div>
+        <div class="tip">互動貼士：一齊揮手講拜拜媽媽。</div>
+      </div>
+    </section>
+
+    <!-- P2 -->
+    <section class="page" data-page="2" data-bgm="gentle" aria-label="第2頁草屋：黑色大豬抱住最後一紮稻草，草屋就嚟起好。">
+      <div class="scene" role="img" aria-label="黑色大豬抱住最後一紮稻草，草屋就嚟起好。">
+        <div class="sky"></div><div class="sun" aria-hidden="true">☀️</div>
+        <div class="ground"></div>
+        <div class="scene-inner">
+          <div class="row">
+            <div class="stack"><span class="pig black" aria-hidden="true">🐷</span><span class="prop" aria-hidden="true">🌾</span><span class="label-chip">黑豬</span></div>
+            <div class="stack"><span class="house" aria-hidden="true">🛖</span><span class="label-chip">草屋</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="caption"><div class="page-label">第2頁｜草屋</div>
+        <div class="main-text">黑色大豬話草屋好易砌，快啲做完可以食午餐。</div>
+        <div class="tip">互動貼士：一齊扮抱稻草。</div>
+      </div>
+    </section>
+
+    <!-- P3 -->
+    <section class="page" data-page="3" data-bgm="gentle" aria-label="第3頁木屋：白色二豬拽住最後一根木頭，來到就嚟完工嘅木屋跟前。">
+      <div class="scene" role="img" aria-label="白色二豬拽住最後一根木頭，來到就嚟完工嘅木屋跟前。">
+        <div class="sky"></div><div class="sun" aria-hidden="true">☀️</div>
+        <div class="ground"></div>
+        <div class="scene-inner">
+          <div class="row">
+            <div class="stack"><span class="pig white" aria-hidden="true">🐷</span><span class="prop" aria-hidden="true">🪵</span><span class="label-chip">白豬</span></div>
+            <div class="stack"><span class="house" aria-hidden="true">🪵🏠</span><span class="label-chip">木屋</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="caption"><div class="page-label">第3頁｜木屋</div>
+        <div class="main-text">白色二豬話：木屋大半日就可以完成，晏晝仲有得訓一覺。</div>
+        <div class="tip">互動貼士：敲敲木質傢俱扮釘木：篤篤。</div>
+      </div>
+    </section>
+
+    <!-- P4 -->
+    <section class="page" data-page="4" data-bgm="gentle" aria-label="第4頁磚屋：花花三豬彎腰推住裝滿紅磚嘅小車，磚屋先砌咗一半。">
+      <div class="scene" role="img" aria-label="花花三豬彎腰推住裝滿紅磚嘅小車，磚屋先砌咗一半。">
+        <div class="sky dusk"></div><div class="sun" aria-hidden="true">🌇</div>
+        <div class="ground"></div>
+        <div class="scene-inner">
+          <div class="row">
+            <div class="stack"><span class="pig spotted" aria-hidden="true">🐷</span><span class="prop" aria-hidden="true">🛒🧱</span><span class="label-chip">花花豬</span></div>
+            <div class="stack"><span class="house" aria-hidden="true">🧱</span><span class="prop" aria-hidden="true">🏗️</span><span class="label-chip">磚屋一半</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="caption"><div class="page-label">第4頁｜磚屋</div>
+        <div class="main-text">花花三豬話：要做到天黑先完成，但係磚屋最堅固。</div>
+        <div class="tip">互動貼士：扮好似好着力咁，一磚兩磚三磚搭高高。</div>
+      </div>
+    </section>
+
+    <!-- P5 -->
+    <section class="page" data-page="5" data-bgm="tense" aria-label="第5頁：大灰狼大力吹氣，草屋冧；黑色大豬由稻草底下衝出嚟逃跑。">
+      <div class="scene" role="img" aria-label="大灰狼大力吹氣，草屋冧；黑色大豬由稻草底下衝出嚟逃跑。">
+        <div class="sky tense"></div>
+        <div class="ground"></div>
+        <div class="scene-inner">
+          <div class="speech" aria-hidden="true">💨💨💨</div>
+          <div class="row">
+            <div class="stack"><span class="wolf" aria-hidden="true">🐺</span><span class="label-chip">大灰狼</span></div>
+            <div class="stack"><span class="house" aria-hidden="true">💨🌾</span><span class="label-chip">草屋冧咗</span></div>
+            <div class="stack"><span class="pig black" aria-hidden="true">🐷</span><span class="prop" aria-hidden="true">💨</span><span class="label-chip">黑豬跑</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="caption"><div class="page-label">第5頁｜大灰狼吹冧草屋</div>
+        <div class="main-text">大灰狼惡騰騰話：黑豬仔，走去邊！</div>
+        <div class="tip">互動貼士：扮狼吹氣；扮小黑豬驚到震。</div>
+      </div>
+    </section>
+
+    <!-- P6 -->
+    <section class="page" data-page="6" data-bgm="tense" aria-label="第6頁：黑豬同白豬喺木屋入面透過小窗驚恐望住；大灰狼用兩隻前爪用力推木屋。">
+      <div class="scene" role="img" aria-label="黑色大豬同白色二豬喺木屋入面，透過小窗驚恐望住外邊；大灰狼用兩隻前爪用力推木屋。">
+        <div class="sky tense"></div>
+        <div class="ground"></div>
+        <div class="scene-inner">
+          <div class="row">
+            <div class="stack"><span class="wolf" aria-hidden="true">🐺</span><span class="prop" aria-hidden="true">🙌</span><span class="label-chip">大灰狼推</span></div>
+            <div class="stack">
+              <span class="house" aria-hidden="true">🪵🏠</span>
+              <div class="row" style="margin-top:-.5rem">
+                <span class="pig black" style="font-size:1.6rem" aria-hidden="true">🐷</span>
+                <span class="pig white" style="font-size:1.6rem" aria-hidden="true">🐷</span>
+              </div>
+              <span class="label-chip">窗邊驚恐</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="caption"><div class="page-label">第6頁｜吹冧木屋</div>
+        <div class="main-text">大灰狼話：快開門！</div>
+        <div class="tip">互動貼士：同小朋友扮用兩手推牆。</div>
+      </div>
+    </section>
+
+    <!-- P7 -->
+    <section class="page" data-page="7" data-bgm="tense" aria-label="第7頁：大灰狼又吹又推，激到面紅；磚屋好穩；三豬喺窗邊陰陰嘴笑。">
+      <div class="scene" role="img" aria-label="大灰狼又吹又推，激到面紅；磚屋好穩；三豬喺窗邊陰陰嘴笑。">
+        <div class="sky tense"></div>
+        <div class="ground"></div>
+        <div class="scene-inner">
+          <div class="row">
+            <div class="stack"><span class="wolf" aria-hidden="true">🐺</span><span class="prop" aria-hidden="true">😤💨</span><span class="label-chip">面紅</span></div>
+            <div class="stack">
+              <span class="house" aria-hidden="true">🧱🏠</span>
+              <div class="row" style="margin-top:-.4rem">
+                <span class="pig black" style="font-size:1.4rem" aria-hidden="true">🐷</span>
+                <span class="pig white" style="font-size:1.4rem" aria-hidden="true">🐷</span>
+                <span class="pig spotted" style="font-size:1.4rem" aria-hidden="true">🐷</span>
+              </div>
+              <span class="label-chip">陰陰嘴笑</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="caption"><div class="page-label">第7頁｜磚屋最穩陣</div>
+        <div class="main-text">磚屋好穩陣。大灰狼冇辦法。</div>
+        <div class="tip">互動貼士：拍心口講唔怕啦唔怕啦。</div>
+      </div>
+    </section>
+
+    <!-- P8 -->
+    <section class="page" data-page="8" data-bgm="tense" aria-label="第8頁：大灰狼上磚屋頂，準備鑽入煙囪。">
+      <div class="scene" role="img" aria-label="大灰狼上磚屋頂，準備鑽入煙囪。">
+        <div class="sky tense"></div><div class="moon" aria-hidden="true">🌙</div>
+        <div class="ground"></div>
+        <div class="scene-inner">
+          <div class="stack" style="margin-bottom:auto;padding-top:6%">
+            <span class="wolf" aria-hidden="true">🐺</span>
+            <span class="prop" aria-hidden="true">🪜</span>
+            <span class="label-chip">屋頂煙通</span>
+          </div>
+          <div class="stack"><span class="house" style="font-size:clamp(3rem,10vw,5rem)" aria-hidden="true">🧱🏠</span>
+            <span class="prop" aria-hidden="true">🏭</span></div>
+        </div>
+      </div>
+      <div class="caption"><div class="page-label">第8頁｜爬煙囪</div>
+        <div class="main-text">大灰狼爬上屋頂煙通。</div>
+        <div class="tip">互動貼士：雙手喺桌面扮爬屋頂。</div>
+      </div>
+    </section>
+
+    <!-- P9 -->
+    <section class="page" data-page="9" data-bgm="happy" aria-label="第9頁：狼跌落鑊，痛到跑走。">
+      <div class="scene" role="img" aria-label="狼由煙囪跌落滾水鑊，好燙，痛到跳起急急腳走咗。">
+        <div class="sky happy"></div>
+        <div class="ground"></div>
+        <div class="scene-inner">
+          <div class="row">
+            <div class="stack"><span class="pot" aria-hidden="true">🍲</span><span class="prop" aria-hidden="true">♨️</span><span class="label-chip">滾水鑊</span></div>
+            <div class="stack"><span class="wolf" aria-hidden="true">🐺</span><span class="prop" aria-hidden="true">💨🏃</span><span class="label-chip">狼走咗</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="caption"><div class="page-label">第9頁｜狼走咗</div>
+        <div class="main-text">狼由煙囪跌落滾水鑊，好燙！痛到跳起，急急腳走咗，唔敢返嚟啦。</div>
+        <div class="tip">互動貼士：縮手講「好燙呀」，揮手拜拜狼。</div>
+      </div>
+    </section>
+
+    <!-- P10 -->
+    <section class="page" data-page="10" data-bgm="happy" aria-label="第10頁結局：三豬手拖手喺磚屋前笑。三指左滑返回星星學樂園。">
+      <div class="scene" role="img" aria-label="三隻小豬手拖手喺磚屋前面歡呼，開心又安全。">
+        <div class="sky happy"></div><div class="sun" aria-hidden="true">☀️</div>
+        <span class="cloud c1" aria-hidden="true">☁️</span>
+        <div class="ground"></div>
+        <div class="scene-inner">
+          <div class="stack" style="margin-bottom:.5rem"><span class="house" style="font-size:clamp(3rem,10vw,5rem)" aria-hidden="true">🧱🏠</span></div>
+          <div class="row">
+            <span class="pig black" aria-hidden="true">🐷</span>
+            <span class="prop" aria-hidden="true">🤝</span>
+            <span class="pig white" aria-hidden="true">🐷</span>
+            <span class="prop" aria-hidden="true">🤝</span>
+            <span class="pig spotted" aria-hidden="true">🐷</span>
+          </div>
+          <div class="prop" aria-hidden="true">🎉🎊</div>
+          <span class="label-chip">結局 · 三指左滑返樂園</span>
+        </div>
+      </div>
+      <div class="caption"><div class="page-label">第10頁｜結局</div>
+        <div class="main-text">三隻小豬手拖手喺磚屋前歡呼。</div>
+        <div class="tip">互動貼士：問最鍾意邊間屋。</div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="nav" aria-label="翻頁控制">
+    <button type="button" class="prev" id="btn-prev" aria-label="上一頁">◀ 上一頁</button>
+    <button type="button" class="replay" id="btn-replay" aria-label="重播旁白">🔊</button>
+    <button type="button" class="next" id="btn-next" aria-label="下一頁">下一頁 ▶</button>
+    <button type="button" class="hub" id="btn-hub" hidden aria-label="返回星星學樂園">⭐ 返樂園</button>
+  </nav>
+</div>
+
+<script>
+(function () {
+  var APP_VERSION = '1a';
+  var HUB = 'https://julianzhumin.github.io/AstraGarten/';
+  var TOTAL = 11; // 0 cover .. 10 ending
+  var page = 0;
+  var tipsOn = true;
+  var bgmOn = true;
+  var started = false;
+  var tipTimer = null;
+  var vo = new Audio();
+  var tip = new Audio();
+  var bgm = new Audio();
+  bgm.loop = true;
+  var BGM_VOL = 0.15;
+  var BGM_DUCK = 0.05;
+  var cache = {};
+
+  var PAGE_AUDIO = {
+    0: { vo: 'cover', tip: 'tip-cover', bgm: 'gentle' },
+    1: { vo: 'p1', tip: 'tip-p1', bgm: 'gentle' },
+    2: { vo: 'p2', tip: 'tip-p2', bgm: 'gentle' },
+    3: { vo: 'p3', tip: 'tip-p3', bgm: 'gentle' },
+    4: { vo: 'p4', tip: 'tip-p4', bgm: 'gentle' },
+    5: { vo: 'p5', tip: 'tip-p5', bgm: 'tense' },
+    6: { vo: 'p6', tip: 'tip-p6', bgm: 'tense' },
+    7: { vo: 'p7', tip: 'tip-p7', bgm: 'tense' },
+    8: { vo: 'p8', tip: 'tip-p8', bgm: 'tense' },
+    9: { vo: 'p9', tip: 'tip-p9', bgm: 'happy' },
+    10: { vo: 'p10', tip: 'tip-p10', bgm: 'happy' }
+  };
+
+  function url(name) {
+    return './audio/' + name + '.mp3?v=' + encodeURIComponent(APP_VERSION);
+  }
+  function preload() {
+    Object.keys(PAGE_AUDIO).forEach(function (k) {
+      var a = PAGE_AUDIO[k];
+      ['vo', 'tip'].forEach(function (kind) {
+        var n = a[kind];
+        if (!cache[n]) {
+          var x = new Audio();
+          x.preload = 'auto';
+          x.src = url(n);
+          cache[n] = x;
+        }
+      });
+    });
+    ['gentle', 'tense', 'happy'].forEach(function (m) {
+      var n = 'bgm-' + m;
+      if (!cache[n]) {
+        var x = new Audio();
+        x.preload = 'auto';
+        x.src = url(n);
+        cache[n] = x;
+      }
+    });
+  }
+
+  function stopVO() {
+    clearTimeout(tipTimer);
+    tipTimer = null;
+    try { vo.pause(); vo.currentTime = 0; } catch (e) {}
+    try { tip.pause(); tip.currentTime = 0; } catch (e) {}
+    setBgmVol(BGM_VOL);
+  }
+
+  function setBgmVol(v) {
+    try { bgm.volume = bgmOn ? v : 0; } catch (e) {}
+  }
+
+  function playBgm(mood) {
+    if (!bgmOn) { try { bgm.pause(); } catch (e) {} return; }
+    var src = url('bgm-' + mood);
+    if (bgm.getAttribute('data-mood') !== mood) {
+      bgm.src = src;
+      bgm.setAttribute('data-mood', mood);
+    }
+    setBgmVol(BGM_VOL);
+    var p = bgm.play();
+    if (p && p.catch) p.catch(function () {});
+  }
+
+  function playPageAudio() {
+    if (!started) return;
+    stopVO();
+    var meta = PAGE_AUDIO[page];
+    playBgm(meta.bgm);
+    vo.src = url(meta.vo);
+    setBgmVol(BGM_DUCK);
+    var p = vo.play();
+    if (p && p.catch) p.catch(function () {});
+    vo.onended = function () {
+      setBgmVol(BGM_VOL);
+      if (!tipsOn) return;
+      tipTimer = setTimeout(function () {
+        tip.src = url(meta.tip);
+        setBgmVol(BGM_DUCK);
+        var q = tip.play();
+        if (q && q.catch) q.catch(function () {});
+        tip.onended = function () { setBgmVol(BGM_VOL); };
+      }, 700);
+    };
+  }
+
+  function showPage(n) {
+    if (n < 0) n = 0;
+    if (n > 10) { goHub(); return; }
+    page = n;
+    var pages = document.querySelectorAll('.page');
+    for (var i = 0; i < pages.length; i++) {
+      pages[i].classList.toggle('active', +pages[i].getAttribute('data-page') === page);
+    }
+    document.getElementById('btn-prev').disabled = page === 0;
+    var atEnd = page === 10;
+    document.getElementById('btn-next').hidden = atEnd;
+    document.getElementById('btn-hub').hidden = !atEnd;
+    if (started) playPageAudio();
+  }
+
+  function next() { if (page >= 10) goHub(); else showPage(page + 1); }
+  function prev() { if (page > 0) showPage(page - 1); }
+  function goHub() {
+    stopVO();
+    try { bgm.pause(); } catch (e) {}
+    location.href = HUB;
+  }
+
+  // double-tap
+  var lastTap = 0;
+  document.getElementById('stage').addEventListener('pointerup', function (e) {
+    if (!started) return;
+    if (e.target.closest && e.target.closest('button')) return;
+    var now = Date.now();
+    if (now - lastTap < 350) {
+      next();
+      lastTap = 0;
+    } else lastTap = now;
+  });
+
+  // three-finger swipe (left = next/hub, right = prev)
+  var swipeStartX = null;
+  var swipeStartY = null;
+  var swipeFired = false;
+  var stage = document.getElementById('stage');
+  function avgTouch(list) {
+    var sx = 0, sy = 0, n = list.length;
+    for (var i = 0; i < n; i++) { sx += list[i].clientX; sy += list[i].clientY; }
+    return { x: sx / n, y: sy / n };
+  }
+  stage.addEventListener('touchstart', function (e) {
+    if (!started) return;
+    if (e.touches.length === 3) {
+      var a = avgTouch(e.touches);
+      swipeStartX = a.x; swipeStartY = a.y; swipeFired = false;
+    } else {
+      swipeStartX = null;
+    }
+  }, { passive: true });
+  stage.addEventListener('touchmove', function (e) {
+    if (swipeStartX == null || swipeFired || e.touches.length !== 3) return;
+    var a = avgTouch(e.touches);
+    var dx = a.x - swipeStartX;
+    var dy = a.y - swipeStartY;
+    if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy) * 1.2) return;
+    swipeFired = true;
+    swipeStartX = null;
+    if (dx < 0) next();
+    else prev();
+  }, { passive: true });
+  stage.addEventListener('touchend', function () {
+    if (swipeFired) { swipeFired = false; return; }
+    swipeStartX = null;
+  }, { passive: true });
+  stage.addEventListener('touchcancel', function () { swipeStartX = null; swipeFired = false; }, { passive: true });
+
+  document.getElementById('btn-prev').addEventListener('click', prev);
+  document.getElementById('btn-next').addEventListener('click', next);
+  document.getElementById('btn-hub').addEventListener('click', goHub);
+  document.getElementById('btn-replay').addEventListener('click', function () { playPageAudio(); });
+
+  document.getElementById('btn-tips').addEventListener('click', function () {
+    tipsOn = !tipsOn;
+    this.setAttribute('aria-pressed', tipsOn ? 'true' : 'false');
+    this.textContent = tipsOn ? '貼士開' : '貼士關';
+    if (!tipsOn) { try { tip.pause(); } catch (e) {} setBgmVol(BGM_VOL); }
+  });
+  document.getElementById('btn-bgm').addEventListener('click', function () {
+    bgmOn = !bgmOn;
+    this.setAttribute('aria-pressed', bgmOn ? 'true' : 'false');
+    this.textContent = bgmOn ? '音樂開' : '音樂關';
+    if (bgmOn) playBgm(PAGE_AUDIO[page].bgm);
+    else { try { bgm.pause(); } catch (e) {} }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (!started) return;
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+    if (e.key === 'r' || e.key === 'R') playPageAudio();
+  });
+
+  document.getElementById('start-btn').addEventListener('click', function () {
+    started = true;
+    document.getElementById('gate').style.display = 'none';
+    preload();
+    showPage(0);
+    playPageAudio();
+  });
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('./sw.js?v=' + encodeURIComponent(APP_VERSION)).catch(function () {});
+    });
+  }
+})();
+</script>
+</body>
+</html>
