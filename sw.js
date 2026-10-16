@@ -1,9 +1,11 @@
 // Offline support for 黑白花三隻小豬. Bump CACHE (and APP_VERSION in index.html) on every release.
-var CACHE = 'three-little-pigs-v1c';
+var CACHE = 'three-little-pigs-v1d';
 var AUDIO = [
   'cover','tip-cover','p1','tip-p1','p2','tip-p2','p3','tip-p3','p4','tip-p4',
   'p5','tip-p5','p6','tip-p6','p7','tip-p7','p8','tip-p8','p9','tip-p9','p10','tip-p10',
-  'sfx-turn','sfx-pop','sfx-tap','sfx-brick','sfx-wind','sfx-stinger','sfx-splash','sfx-boing','sfx-cheer'
+  'p11','tip-p11','p12','tip-p12',
+  'sfx-turn','sfx-pop','sfx-tap','sfx-brick','sfx-wind','sfx-stinger','sfx-splash','sfx-boing','sfx-cheer',
+  'sfx-chew','sfx-snore','sfx-knock','sfx-struggle'
 ].map(function (n) { return './audio/' + n + '.mp3'; });
 var FILES = ['./', './index.html', './manifest.json', './icon.svg', './icon-180.png', './icon-192.png', './icon-512.png', './icon-maskable-512.png'].concat(AUDIO);
 self.addEventListener('install', function (e) {
