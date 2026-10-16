@@ -1,5 +1,5 @@
 // Offline support for 黑白花三隻小豬. Bump CACHE (and APP_VERSION in index.html) on every release.
-var CACHE = 'three-little-pigs-v1b';
+var CACHE = 'three-little-pigs-v1c';
 var AUDIO = [
   'cover','tip-cover','p1','tip-p1','p2','tip-p2','p3','tip-p3','p4','tip-p4',
   'p5','tip-p5','p6','tip-p6','p7','tip-p7','p8','tip-p8','p9','tip-p9','p10','tip-p10',
